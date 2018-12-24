@@ -3,6 +3,7 @@ defmodule Servy.Handler do
   import Servy.Parser, only: [parse: 1]
   alias Servy.Conv
   alias Servy.BearController
+  alias Servy.VideoCam
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -14,6 +15,31 @@ defmodule Servy.Handler do
     |> route
     |> track
     |> format_response
+  end
+
+  def route(%Conv{method: "POST", path: "/pledges"} = conv) do
+    Servy.PledgeController.create(conv, conv.params)
+  end
+
+  def route(%Conv{method: "GET", path: "/pledges"} = conv) do
+    Servy.PledgeController.index(conv)
+  end
+
+  def route(%Conv{method: "GET", path: "/sensors"} = conv) do
+    bigfoot_task = Task.async(fn -> Servy.Tracker.get_location("bigfoot") end)
+
+    snapshots =
+      ["cam-1", "cam-2", "cam-3"]
+      |> Enum.map(&Task.async(fn -> VideoCam.get_snapshot(&1) end))
+      |> Enum.map(&Task.await/1)
+
+    where_is_bigfoot = Task.await(bigfoot_task)
+
+    %{conv | status: 200, resp_body: inspect({snapshots, where_is_bigfoot})}
+  end
+
+  def route(%Conv{method: "GET", path: "/kaboom"}) do
+    raise "Kaboom!"
   end
 
   def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
