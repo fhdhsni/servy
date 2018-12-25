@@ -1,11 +1,9 @@
 defmodule Servy.BearController do
-  alias Servy.Conv
-
   alias Servy.Wildthings
   alias Servy.Bear
   @template_path Path.expand("../../templates", __DIR__)
 
-  defp render(conv, template, bindings \\ []) do
+  defp render(conv, template, bindings) do
     content =
       @template_path
       |> Path.join(template)

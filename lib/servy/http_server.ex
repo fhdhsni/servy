@@ -14,7 +14,7 @@ defmodule Servy.HttpServer do
     # `active: false` - receive data when we're ready by calling `:gen_tcp.recv/2`
     # `reuseaddr: true` - allows reusing the address if the listener crashes
 
-    IO.puts("\n🎧  Listening for connection requests on port #{port}...\n")
+    IO.puts("Listening for connection requests on port #{port}...\n")
 
     accept_loop(listen_socket)
   end
@@ -23,7 +23,7 @@ defmodule Servy.HttpServer do
   Accepts client connections on the `listen_socket`.
   """
   def accept_loop(listen_socket) do
-    IO.puts("⌛️  Waiting to accept a client connection...\n")
+    IO.puts("Waiting to accept a client connection...\n")
 
     # Suspends (blocks) and waits for a client connection. When a connection
     # is accepted, `client_socket` is bound to a new client socket.

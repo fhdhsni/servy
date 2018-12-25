@@ -4,6 +4,7 @@ defmodule Servy.MixProject do
   def project do
     [
       app: :servy,
+      description: "A crappy HTTP server",
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
@@ -11,18 +12,20 @@ defmodule Servy.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      # give the callback module, the callback module can be any
+      # module the uses the Application behaviour
+      # OTP calls the module `start` function
+      mod: {Servy, []},
+      env: [port: 4445]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:poison, "~> 4.0"}
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]
   end
 end
